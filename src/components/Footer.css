@@ -1,0 +1,113 @@
+/* Footer Styles */
+.footer {
+  background: rgba(11, 12, 15, 0.9);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-3xl) 0 var(--space-2xl);
+  margin-top: auto;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xl);
+  padding-bottom: var(--space-2xl);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-2xl);
+  text-align: center;
+}
+
+.footer-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footer-brand {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.footer-role {
+  font-size: var(--text-sm);
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.footer-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-email {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.footer-email:hover {
+  color: var(--color-accent-primary);
+  gap: var(--space-md);
+}
+
+.footer-social {
+  display: flex;
+  justify-content: center;
+}
+
+.social-links {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-base);
+}
+
+.social-link:hover {
+  color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+  background: rgba(215, 184, 141, 0.08);
+  transform: translateY(-4px);
+}
+
+.footer-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-copyright {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer { padding: var(--space-2xl) 0 var(--space-xl); }
+  .footer-content { gap: var(--space-lg); }
+}
+
+@media (max-width: 480px) {
+  .footer { padding: var(--space-xl) 0 var(--space-lg); }
+  .footer-content { gap: var(--space-md); }
+  .footer-brand { font-size: var(--text-lg); }
+  .social-links { gap: var(--space-sm); }
+  .social-link { width: 36px; height: 36px; }
+}
