@@ -1,111 +1,111 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { projects } from '../data/projects';
 import './Projects.css';
 
 export default function Projects() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    },
-  };
-
   return (
-    <section id="projects" className="projects">
+    <section id="projects" className="section-shell projects">
       <div className="container">
-        <motion.div
-          className="projects-content"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <motion.div className="projects-header" variants={itemVariants}>
-            <h2 className="section-heading">Featured Projects</h2>
-            <div className="heading-accent"></div>
-          </motion.div>
+        <div className="projects-top">
+          <span className="section-kicker">04 / SELECTED WORK</span>
+          <p>Live work, built for the real world.</p>
+        </div>
 
-          <motion.div className="projects-grid" variants={containerVariants}>
-            {projects.filter(p => p.featured).map((project, _index) => (
-              <motion.div
-                key={project.id}
-                className="project-card"
-                variants={itemVariants}
-                whileHover={{ y: -8 }}
+        {projects.map((project, index) => {
+          const VisualElement = project.type === 'live' ? 'a' : 'div';
+          const visualLinkProps = project.type === 'live'
+            ? {
+                href: project.projectUrl,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                'aria-label': `Visit ${project.name} website`,
+              }
+            : {};
+
+          return (
+            <motion.article
+              className={`project-card project-${index + 1}`}
+              key={project.id}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              whileHover={{ y: -8 }}
+              transition={{ duration: 0.45, ease: 'easeOut' }}
+            >
+              <VisualElement
+                {...visualLinkProps}
+                className={`project-visual ${project.type === 'development' ? 'project-visual-development' : ''}`}
               >
-                <div className="project-content">
-                  <div className="project-header">
-                    <h3 className="project-name">{project.name}</h3>
-                    <div className="project-links">
-                      {project.projectUrl && (
-                        <a
-                          href={project.projectUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="project-link"
-                          title="View Project"
-                        >
-                          <ExternalLink size={20} />
-                        </a>
-                      )}
+                {project.preview && (
+                  <img
+                    className="project-preview-image"
+                    src={project.preview}
+                    alt={`${project.name} website preview`}
+                    loading="lazy"
+                  />
+                )}
+                <div className="browser-bar">
+                  <i />
+                  <i />
+                  <i />
+                  <span>{project.type === 'live' ? new URL(project.projectUrl).hostname : project.category}</span>
+                </div>
+
+                {project.preview ? (
+                  <div className="project-visual-copy">
+                    <small>{project.category}</small>
+                    <strong>{project.name}</strong>
+                  </div>
+                ) : (
+                  <div className="project-fallback">
+                    <span className="mini-label">Development Project</span>
+                    <strong>{project.name}</strong>
+                  </div>
+                )}
+
+                {project.type === 'development' && (
+                  <div className="project-dashboard" aria-hidden="true">
+                    <div className="dashboard-top" />
+                    <div className="dashboard-grid">
+                      <span />
+                      <span />
+                      <span />
+                      <span />
                     </div>
                   </div>
+                )}
+              </VisualElement>
 
-                  <p className="project-description">{project.description}</p>
+              <div className="project-info">
+                <span className="project-number">{project.id}</span>
 
-                  <div className="project-tech">
-                    {project.technologies.map((tech, techIndex) => (
-                      <span key={techIndex} className="tech-tag">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                <div>
+                  <p className="project-category">{project.category}</p>
+                  <h2>{project.name}</h2>
+                  <p>{project.description}</p>
 
-                  <div className="project-footer">
-                    {project.projectUrl ? (
-                      <a
-                        href={project.projectUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-btn"
-                      >
-                        View Project <ExternalLink size={16} />
-                      </a>
-                    ) : (
-                      <span className="project-btn-disabled">Coming Soon</span>
-                    )}
-                  </div>
+                  {project.features && (
+                    <div className="project-features">
+                      {project.features.map((feature) => (
+                        <span key={feature}>{feature}</span>
+                      ))}
+                    </div>
+                  )}
+
+                  {project.type === 'live' ? (
+                    <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
+                      {project.liveLabel}
+                      <ArrowUpRight size={17} />
+                    </a>
+                  ) : (
+                    <span className="project-status-tag">{project.liveLabel}</span>
+                  )}
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {projects.length > 0 && (
-            <motion.div className="projects-footer" variants={itemVariants}>
-              <a href="#contact" className="view-all-btn">
-                View All Projects & More
-              </a>
-            </motion.div>
-          )}
-        </motion.div>
+              </div>
+            </motion.article>
+          );
+        })}
       </div>
     </section>
   );

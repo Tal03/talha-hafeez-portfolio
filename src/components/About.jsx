@@ -1,76 +1,29 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { siteConfig } from '../data/siteConfig';
 import './About.css';
 
 export default function About() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    },
-  };
-
-  const details = [
-    { label: 'Degree', value: siteConfig.about.details.degree },
-    { label: 'University', value: siteConfig.about.details.university },
-    { label: 'Semester', value: siteConfig.about.details.semester },
-    { label: 'Graduation', value: siteConfig.about.details.graduation },
-    { label: 'Location', value: siteConfig.about.details.location },
-  ];
-
   return (
-    <section id="about" className="about">
-      <div className="container">
+    <section id="about" className="section-shell about">
+      <div className="container split-layout">
+        <div>
+          <span className="section-kicker">02 / ABOUT</span>
+          <h2>{siteConfig.about.heading}</h2>
+        </div>
+
         <motion.div
-          className="about-content"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          className="about-copy"
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <motion.div className="about-header" variants={itemVariants}>
-            <span className="section-tag">01 — ABOUT</span>
-            <h2 className="section-heading">{siteConfig.about.heading}</h2>
-            <div className="heading-accent"></div>
-          </motion.div>
-
-          <motion.div className="about-layout" variants={itemVariants}>
-            <motion.p className="about-description" variants={itemVariants}>
-              {siteConfig.about.description}
-            </motion.p>
-
-            <motion.div className="about-details" variants={itemVariants}>
-              <div className="details-grid">
-                {details.map((detail, index) => (
-                  <motion.div
-                    key={index}
-                    className="detail-item"
-                    variants={itemVariants}
-                  >
-                    <span className="detail-label">{detail.label}</span>
-                    <span className="detail-value">{detail.value}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </motion.div>
+          <p>{siteConfig.about.description}</p>
+          <div className="about-points">
+            {siteConfig.about.points.map((point) => (
+              <span key={point}>{point}</span>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

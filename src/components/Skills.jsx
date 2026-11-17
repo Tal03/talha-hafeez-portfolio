@@ -1,97 +1,43 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import './Skills.css';
 
+const skillGroups = [
+  { id: '01', title: 'Core Stack', items: ['C++', 'Python', 'JavaScript', 'React.js', 'HTML', 'CSS'] },
+  { id: '02', title: 'Platform Build', items: ['Full-Stack Development', 'Web Development', 'AI & Machine Learning'] },
+  { id: '03', title: 'Delivery', items: ['Modern UI Engineering', 'Scalable Product Thinking', 'Problem Solving'] },
+];
+
 export default function Skills() {
-  const skillCategories = [
-    {
-      category: 'Programming Languages',
-      skills: ['C++', 'Python', 'JavaScript']
-    },
-    {
-      category: 'Frontend & Web',
-      skills: ['React', 'HTML', 'CSS', 'Web Development']
-    },
-    {
-      category: 'Technologies & Concepts',
-      skills: ['Artificial Intelligence', 'Object-Oriented Programming', 'Problem Solving', 'Git']
-    }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    },
-  };
-
-  const skillVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.4,
-        ease: 'easeOut',
-      },
-    },
-  };
-
   return (
-    <section id="skills" className="skills">
+    <section id="skills" className="section-shell skills">
       <div className="container">
-        <motion.div
-          className="skills-content"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <motion.div className="skills-header" variants={itemVariants}>
-            <h2 className="section-heading">Skills & Expertise</h2>
-            <div className="heading-accent"></div>
-          </motion.div>
+        <span className="section-kicker">03 / SKILLS</span>
+        <h2>
+          Tools are only useful
+          <br />
+          <em>in good hands.</em>
+        </h2>
 
-          <motion.div className="skills-grid" variants={containerVariants}>
-            {skillCategories.map((category, catIndex) => (
-              <motion.div
-                key={catIndex}
-                className="skill-category"
-                variants={itemVariants}
-              >
-                <h3 className="category-title">{category.category}</h3>
-                <div className="skills-list">
-                  {category.skills.map((skill, skillIndex) => (
-                    <motion.div
-                      key={skillIndex}
-                      className="skill-badge"
-                      variants={skillVariants}
-                      whileHover={{ scale: 1.05, y: -4 }}
-                    >
-                      <span>{skill}</span>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
+        <div className="skill-grid">
+          {skillGroups.map((group) => (
+            <motion.div
+              key={group.id}
+              className="skill-card"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              whileHover={{ y: -8 }}
+            >
+              <div className="skill-index">{group.id}</div>
+              <h3>{group.title}</h3>
+              <div className="skill-tags">
+                {group.items.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

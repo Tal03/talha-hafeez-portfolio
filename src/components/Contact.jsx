@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Send, ExternalLink } from 'lucide-react';
+import { ExternalLink, Mail, Send } from 'lucide-react';
 import { siteConfig } from '../data/siteConfig';
-import './Contact.css';
+import SocialIcon from './SocialIcon';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,202 +13,134 @@ export default function Contact() {
 
   const [submitted, setSubmitted] = useState(false);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((previous) => ({ ...previous, [name]: value }));
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    },
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+    if (!formData.name || !formData.email || !formData.message) {
+      return;
+    }
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+    try {
+      const payload = new FormData();
+      payload.append('access_key', '9879ae63-78c2-4ea0-b958-6f3f0bf26c19');
+      payload.append('name', formData.name);
+      payload.append('email', formData.email);
+      payload.append('message', formData.message);
 
-  if (!formData.name || !formData.email || !formData.message) {
-    return;
-  }
-
-  try {
-    const data = new FormData();
-
-    data.append('access_key', '9879ae63-78c2-4ea0-b958-6f3f0bf26c19');
-    data.append('name', formData.name);
-    data.append('email', formData.email);
-    data.append('message', formData.message);
-
-    const response = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      body: data,
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      setSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: payload,
       });
 
-      setTimeout(() => setSubmitted(false), 5000);
-    } else {
-      alert('Something went wrong. Please try again.');
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Unable to send message. Please try again.');
     }
-  } catch (error) {
-    console.error(error);
-    alert('Unable to send message. Please try again.');
-  }
-};
+  };
 
   const contactMethods = [
-    {
-      icon: Mail,
-      label: 'Email',
-      value: siteConfig.email,
-      href: `mailto:${siteConfig.email}`,
-    },
-    {
-      icon: Mail,
-      label: 'LinkedIn',
-      value: 'Connect with me',
-      href: siteConfig.social.linkedin,
-    },
+    { label: 'Email', value: siteConfig.email, href: `mailto:${siteConfig.email}`, icon: Mail },
+    { label: 'LinkedIn', value: 'Connect with me', href: siteConfig.social.linkedin, network: 'linkedin' },
+    { label: 'GitHub', value: 'Explore projects', href: siteConfig.social.github, network: 'github' },
   ];
 
   return (
-    <section id="contact" className="contact">
+    <section id="contact" className="contact section-shell">
       <div className="container">
         <motion.div
           className="contact-content"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
         >
-          <motion.div className="contact-header" variants={itemVariants}>
-            <h2 className="section-heading">Get In Touch</h2>
-            <div className="heading-accent"></div>
+          <motion.div className="contact-header" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <span className="section-kicker">09 / CONTACT</span>
+            <h2>Let&apos;s build something meaningful.</h2>
             <p className="contact-subtitle">
-              I'd love to hear from you! Whether you have a question, want to collaborate, or just want to chat about technology and AI, feel free to reach out.
+              I&apos;m open to impactful work, product collaborations, and discussions around software engineering, AI, and digital experiences.
             </p>
           </motion.div>
 
           <div className="contact-layout">
-            <motion.div className="contact-form-section" variants={itemVariants}>
-              <h3 className="form-title">Send me a message</h3>
+            <motion.div className="contact-form-section" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <h3 className="form-title">Send a message</h3>
+
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Your name"
-                    required
-                  />
+                  <input id="name" name="name" type="text" value={formData.name} onChange={handleChange} placeholder="Your name" required />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="your.email@example.com"
-                    required
-                  />
+                  <input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="your.email@example.com" required />
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="message">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Tell me about your project, opportunity, or question..."
-                    rows="6"
-                    required
-                  ></textarea>
+                  <textarea id="message" name="message" rows="6" value={formData.message} onChange={handleChange} placeholder="Tell me about your project, idea, or opportunity..." required />
                 </div>
 
                 <button type="submit" className="submit-btn">
-                  <Send size={20} />
-                  <span>Send Message</span>
+                  <Send size={18} />
+                  Send Message
                 </button>
 
                 {submitted && (
-                  <motion.div
-                    className="success-message"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                  >
-                    ✓ Message sent! I'll get back to you soon.
+                  <motion.div className="success-message" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+                    Message sent successfully. I&apos;ll get back to you soon.
                   </motion.div>
                 )}
               </form>
             </motion.div>
 
-            <motion.div className="contact-info-section" variants={itemVariants}>
-              <h3 className="info-title">Contact Information</h3>
+            <motion.div className="contact-info-section" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+              <h3 className="info-title">Contact information</h3>
 
               <div className="contact-methods">
-                {contactMethods.map((method, index) => {
+                {contactMethods.map((method) => {
                   const Icon = method.icon;
                   return (
                     <motion.a
-                      key={index}
+                      key={method.label}
                       href={method.href}
-                      target={method.label !== 'Email' ? '_blank' : '_self'}
-                      rel={method.label !== 'Email' ? 'noopener noreferrer' : ''}
+                      target={method.href.startsWith('http') ? '_blank' : undefined}
+                      rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                       className="contact-method"
-                      variants={itemVariants}
                       whileHover={{ x: 8 }}
                     >
                       <div className="method-icon">
-                        <Icon size={24} />
+                        {method.network ? <SocialIcon network={method.network} /> : <Icon size={21} />}
                       </div>
+
                       <div className="method-content">
                         <span className="method-label">{method.label}</span>
                         <span className="method-value">{method.value}</span>
                       </div>
-                      <ExternalLink size={16} className="method-arrow" />
+
+                      <ExternalLink size={15} className="method-arrow" />
                     </motion.a>
                   );
                 })}
               </div>
 
               <div className="contact-cta">
-                <p>Feel free to reach out anytime. I'm always interested in discussing new opportunities and ideas!</p>
+                <p>New opportunities, product ideas, and meaningful collaborations are always welcome.</p>
               </div>
             </motion.div>
           </div>
